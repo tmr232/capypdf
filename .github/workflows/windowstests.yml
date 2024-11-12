@@ -25,6 +25,7 @@ jobs:
           Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
           Invoke-RestMethod -Uri https://get.scoop.sh | Invoke-Expression
           scoop install ghostscript
+          echo $env:PATH
         shell: pwsh
 
       - run: uv pip install meson ninja pillow
