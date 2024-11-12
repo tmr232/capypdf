@@ -21,6 +21,12 @@ jobs:
 
       - run: uv venv
 
+      - run: |
+          Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+          Invoke-RestMethod -Uri https://get.scoop.sh | Invoke-Expression
+          scoop install ghostscript
+        shell: pwsh
+
       - run: uv pip install meson ninja pillow
       - uses: ilammy/msvc-dev-cmd@v1
       - name: Configure
