@@ -35,4 +35,7 @@ jobs:
       - name: Build
         run: uv run ninja -C builddir
       - name: Test
-        run: uv run ninja -C builddir test
+        run: |
+          echo $env:PATH
+          uv run ninja -C builddir test
+        shell: pwsh
