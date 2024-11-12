@@ -1,0 +1,41 @@
+name: CapyPDF CI
+run-name: Windows ${{ github.actor }} unit tests for CapyPDF
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+jobs:
+  CapyPDF-tests-Windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+
+      - name: "Set up Python"
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - run: uv venv
+
+      - run: |
+          Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+          Invoke-RestMethod -Uri https://get.scoop.sh | Invoke-Expression
+          scoop install ghostscript
+          echo $env:PATH
+        shell: pwsh
+
+      - run: uv pip install meson ninja pillow
+      - uses: ilammy/msvc-dev-cmd@v1
+      - name: Configure
+        run: uv run meson setup --buildtype=debugoptimized -Db_pch=false -Ddevtools=true builddir
+      - name: Build
+        run: uv run ninja -C builddir
+      - name: Test
+        run: |
+          echo $env:PATH
+          uv run ninja -C builddir test
+        shell: pwsh
