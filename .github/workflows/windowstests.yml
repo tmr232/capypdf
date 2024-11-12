@@ -1,5 +1,5 @@
 name: CapyPDF CI
-run-name: ${{ github.actor }} unit tests for CapyPDF
+run-name: Windows ${{ github.actor }} unit tests for CapyPDF
 on:
   push:
     branches:
@@ -22,6 +22,7 @@ jobs:
       - run: uv venv
 
       - run: uv pip install meson ninja pillow
+      - uses: ilammy/msvc-dev-cmd@v1
       - name: Configure
         run: uv run meson setup --buildtype=debugoptimized -Db_pch=false -Ddevtools=true builddir
       - name: Build
